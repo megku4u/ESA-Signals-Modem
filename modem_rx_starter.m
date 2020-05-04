@@ -1,5 +1,6 @@
 
-load short_modem_rx.mat
+%load short_modem_rx.mat
+load long_modem_rx.mat
 
 % The received signal includes a bunch of samples from before the
 % transmission started so we need discard the samples from before
@@ -25,6 +26,9 @@ t = t./Fs;
 figure()
 DTFT_fftbased(y_t);
 
+% Scale down by factor of G
+y_t = y_t./500;
+
 %multiply cosine
 y_cos = y_t.*cos(2.*pi.*f_c.*t);
 
@@ -32,17 +36,32 @@ figure()
 DTFT_fftbased(y_cos);
 
 % Apply low pass filter
+W = 480;
+h = W/pi*sinc(W/pi*t);
 
+y_read = conv(y_cos, h);
+figure()
+DTFT_fftbased(y_read);
+
+figure()
+plot(y_read);
 
 %% 
+% Approximate signal
+y = y_read(50:100:end);
+y = y(1:msg_length*8);
+y(y > 0) = 1;
+y(y < 0) = 0;
+
+figure()
+plot(y);
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
+x_d = y;
 % convert to a string assuming that x_d is a vector of 1s and 0s
 % representing the decoded bits
-% BitsToString(x_d)
+BitsToString(x_d)
 
 %% FUNCTIONS
 function [X, O] = DTFT_fftbased(x)
