@@ -43,7 +43,7 @@ DTFT_fftbased(y_cos);
 
 %%
 % Apply low pass filter
-W = 480;
+W = f_c/2 + 20;
 h = W/pi*sinc(W/pi*t);
 
 % Convolve the signal with the low-pass filter and plot the output
