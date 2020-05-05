@@ -1,4 +1,5 @@
 
+% Choose which message to decode
 %load short_modem_rx.mat
 load long_modem_rx.mat
 
@@ -17,44 +18,56 @@ y_t = y_r(start_idx+length(x_sync):end); % y_t is the signal which starts at the
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-
-plot(y_t);
 % create time vector
 t = linspace(0, size(y_t,1)-1, size(y_t,1))';
 t = t./Fs;
 
+plot(y_t);
+title("Raw Received Signal")
+
 figure()
+title("DTFT of Raw Signal")
 DTFT_fftbased(y_t);
 
+%%
 % Scale down by factor of G
 y_t = y_t./500;
 
-%multiply cosine
+%multiply by cosine
 y_cos = y_t.*cos(2.*pi.*f_c.*t);
 
 figure()
+title("DTFT of Signal Multiplied by Cosine")
 DTFT_fftbased(y_cos);
 
+
+%%
 % Apply low pass filter
 W = 480;
 h = W/pi*sinc(W/pi*t);
 
+% Convolve the signal with the low-pass filter and plot the output
 y_read = conv(y_cos, h);
 figure()
+title("DTFT of Convolved Signal")
 DTFT_fftbased(y_read);
 
+
 figure()
-plot(y_read);
+plot(y_read(1:100*msg_length*8));
+title("Filtered Signal")
 
 %% 
-% Approximate signal
+% Approximate signal - take out the noise and the extra length at the end.
+% y is the vector of 1s and 0s that represent the message in bits.
 y = y_read(50:100:end);
 y = y(1:msg_length*8);
 y(y > 0) = 1;
 y(y < 0) = 0;
 
 figure()
-plot(y);
+plot(y, ".");
+title("Decoded Signal")
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
