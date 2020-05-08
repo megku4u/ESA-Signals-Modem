@@ -2,7 +2,7 @@ close all
 
 % Choose which message to decode
 %load short_modem_rx.mat
-load double_maybe_rx.mat
+load double_rx.mat
 
 % The received signal includes a bunch of samples from before the
 % transmission started so we need discard the samples from before
@@ -76,11 +76,15 @@ title("Filtered Signal")
 %% 
 % Approximate signal - take out the noise and the extra length at the end.
 % y is the vector of 1s and 0s that represent the message in bits.
-y_cos = y_cos_read(50:100:end);
-y_sin = y_sin_read(50:100:end);
+y_cos = y_cos_read(45:100:end);
+y_sin = y_sin_read(45:100:end);
 
 y_cos = y_cos(1:msg_length*8);
 y_sin = y_sin(1:msg_length*8);
+
+
+figure
+plot(y_cos, y_sin, '.')
 
 y_cos(y_cos > 0) = 1;
 y_cos(y_cos < 0) = 0;
@@ -91,6 +95,7 @@ y_sin(y_sin < 0) = 0;
 % figure(7)
 % plot(y);
 % title("Decoded Signal")
+
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
