@@ -13,7 +13,7 @@ m_boxy = conv(m_us, ones(SymbolPeriod, 1));
 plot(m_boxy); % visualize the boxy signal
 
 % create a cosine with analog frequency f_c
-c = cos(2*pi*f_c/Fs*[0:length(m_boxy)-1]');
+c = sin(2*pi*f_c/Fs*[0:length(m_boxy)-1]');
 % create the transmitted signal
 x_tx = m_boxy.*c;
 plot(x_tx)  % visualize the transmitted signal
@@ -31,6 +31,6 @@ x_sync = x_sync/max(abs(x_sync))*0.5;
 x_tx = [x_sync;x_tx];
 save sync_noise.mat x_sync Fs msg_length
 % write the data to a file
-audiowrite('acoustic_modem_short_tx.wav', x_tx, Fs);
+audiowrite('acoustic_modem_short_sin_tx.wav', x_tx, Fs);
 
 

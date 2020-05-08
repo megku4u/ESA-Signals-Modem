@@ -31,7 +31,7 @@ DTFT_fftbased(y_t);
 
 %%
 % Scale down by factor of G
-y_t = y_t./(8*10^6);
+y_t = y_t./(8;
 
 %multiply by cosine
 y_cos = y_t.*sin(2.*pi.*f_c.*t);
@@ -47,7 +47,7 @@ W = f_c/2 + 20;
 h = W/pi*sinc(W/pi*t);
 
 % Convolve the signal with the low-pass filter and plot the output
-y_read = -conv(y_cos, h);
+y_read = conv(y_cos, h);
 figure()
 title("DTFT of Convolved Signal")
 DTFT_fftbased(y_read);
